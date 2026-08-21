@@ -29,5 +29,5 @@ chezmoi apply
 
 ## 📜 License
 
-MIT © 2026 Anak Agung Bagus Kresna Laksana.
+MIT © 2026 Anak Agung Bagus Kresna Laksana.  
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
