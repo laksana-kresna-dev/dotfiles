@@ -1,0 +1,15 @@
+# Configuration for chezmoi
+sourceDir = "{{ .chezmoi.homeDir }}/.local/share/chezmoi"
+
+[diff]
+    command = "nvim"
+    args = ["-d", "{{ `{{ .Destination }}` }}", "{{ `{{ .Target }}` }}"]
+
+[merge]
+    command = "nvim"
+    args = ["-d", "{{ `{{ .Destination }}` }}", "{{ `{{ .Source }}` }}", "{{ `{{ .Target }}` }}"]
+
+[data]
+    name = "Anak Agung Bagus Kresna Laksana"
+    email = "agungkresnalaksana@gmail.com"
+    github_username = "laksana-kresna-dev"
