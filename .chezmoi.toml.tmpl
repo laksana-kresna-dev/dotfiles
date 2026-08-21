@@ -1,3 +1,6 @@
+[hooks.read-source-state.pre]
+    command = "{{ .chezmoi.sourceDir }}/.install-password-manager.sh"
+
 # Configuration for chezmoi
 sourceDir = "{{ .chezmoi.homeDir }}/.local/share/chezmoi"
 
