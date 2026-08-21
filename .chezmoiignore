@@ -16,3 +16,17 @@ LICENSE
 # Temporary/Cache files
 **/*.tmp
 **/*.log
+
+# Ignore unencrypted SSH private keys
+.ssh/id_rsa
+.ssh/id_ed25519
+.ssh/id_ecdsa
+!.ssh/*.pub
+
+# Ignore GPG private keys dump
+*.gpg-key
+private-keys-v1.d/
+
+# Ignore KeepassXC database files & master keys
+*.kdbx
+*.key

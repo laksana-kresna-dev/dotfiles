@@ -1,0 +1,12 @@
+# Ignore Age private keys
+.config/chezmoi/key.txt
+key.txt
+*.key
+
+# Ignore KeePassXC database
+*.kdbx
+
+# Ignore OS/Editor temporary files
+.DS_Store
+*.swp
+*.tmp
