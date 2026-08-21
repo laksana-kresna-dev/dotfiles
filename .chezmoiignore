@@ -1,0 +1,18 @@
+# Ignore documentation and git assets from home directory
+README.md
+LICENSE
+.git
+.gitignore
+
+# Ignore setup scripts from being copied directly to $HOME
+.install-password-manager.sh
+
+# OS-Specific Conditions
+{{ if ne .chezmoi.os "linux" }}
+.config/i3
+.config/sway
+{{ end }}
+
+# Temporary/Cache files
+**/*.tmp
+**/*.log
