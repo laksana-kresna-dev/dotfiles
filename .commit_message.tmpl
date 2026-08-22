@@ -1,5 +1,14 @@
-{{- if .chezmoi.git.diff -}}
-{{- $files := .chezmoi.git.diff -}}
+{{- $hasDiff := false -}}
+{{- $files := list -}}
+
+{{- if hasKey .chezmoi "git" -}}
+  {{- if .chezmoi.git.diff -}}
+    {{- $hasDiff = true -}}
+    {{- $files = .chezmoi.git.diff -}}
+  {{- end -}}
+{{- end -}}
+
+{{- if $hasDiff -}}
 {{- $first := index $files 0 -}}
 {{- $scope := "dotfiles" -}}
 
@@ -13,7 +22,7 @@
   {{- $scope = "docs" -}}
 {{- end -}}
 
-{{ promptString "Commit message (e.g. feat: add plugin / fix: keymap / refactor: modularize)" }}
+{{ promptString "Commit message (feat: new feature | fix: bug | refactor: rewrite | docs: documentation | style: formatting | chore: maintenance)" }}
 
 Updated files:
 {{ range $files -}}
