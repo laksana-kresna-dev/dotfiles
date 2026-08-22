@@ -1,8 +1,15 @@
+# Encryption settings
 encryption = "age"
 
 [age]
     identity = "{{ .chezmoi.homeDir }}/.config/chezmoi/key.txt"
     recipient = "age12fqygewqcg6rt7dfnh0zu7fyts9wykwhd67dnlzwm2u5r7q9a4yswkmrut"
+
+# Auto commit & push configurations
+[git]
+    autoCommit = true
+    autoPush = false
+    commitMessageTemplateFile = ".commit_message.tmpl"
 
 [hooks.read-source-state.pre]
     command = "{{ .chezmoi.sourceDir }}/.install-password-manager.sh"

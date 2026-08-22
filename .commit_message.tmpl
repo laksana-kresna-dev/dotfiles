@@ -1,0 +1,10 @@
+{{- if .chezmoi.git.diff -}}
+chore(dotfiles): update {{ .chezmoi.git.diff | len }} file(s) on {{ .chezmoi.hostname }}
+
+Updated files:
+{{ range .chezmoi.git.diff -}}
+- {{ . }}
+{{ end -}}
+{{- else -}}
+chore(dotfiles): update configurations on {{ .chezmoi.hostname }} [{{ now | date "2006-01-02 15:04" }}]
+{{- end -}}
