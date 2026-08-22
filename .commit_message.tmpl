@@ -1,10 +1,25 @@
 {{- if .chezmoi.git.diff -}}
-chore(dotfiles): update {{ .chezmoi.git.diff | len }} file(s) on {{ .chezmoi.hostname }}
+{{- $files := .chezmoi.git.diff -}}
+{{- $first := index $files 0 -}}
+{{- $scope := "dotfiles" -}}
+
+{{- if contains ".chezmoi" $first -}}
+  {{- $scope = "chezmoi" -}}
+{{- else if contains "dot_config/nvim" $first -}}
+  {{- $scope = "nvim" -}}
+{{- else if contains "dot_zshrc" $first -}}
+  {{- $scope = "zsh" -}}
+{{- else if or (contains "README" $first) (hasSuffix ".md" $first) (contains "LICENSE" $first) -}}
+  {{- $scope = "docs" -}}
+{{- end -}}
+
+{{ promptString "Commit message (e.g. feat: add plugin / fix: keymap / refactor: modularize)" }}
 
 Updated files:
-{{ range .chezmoi.git.diff -}}
+{{ range $files -}}
 - {{ . }}
-{{ end -}}
+{{ end }}
+Author: {{ .chezmoi.username }}@{{ .chezmoi.hostname }}
 {{- else -}}
-chore(dotfiles): update configurations on {{ .chezmoi.hostname }} [{{ now | date "2006-01-02 15:04" }}]
+chore(dotfiles): update configurations by {{ .chezmoi.username }} on {{ .chezmoi.hostname }}
 {{- end -}}
