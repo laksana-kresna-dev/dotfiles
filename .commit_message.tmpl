@@ -8,27 +8,14 @@
   {{- end -}}
 {{- end -}}
 
-{{- if $hasDiff -}}
-{{- $first := index $files 0 -}}
-{{- $scope := "dotfiles" -}}
-
-{{- if contains ".chezmoi" $first -}}
-  {{- $scope = "chezmoi" -}}
-{{- else if contains "dot_config/nvim" $first -}}
-  {{- $scope = "nvim" -}}
-{{- else if contains "dot_zshrc" $first -}}
-  {{- $scope = "zsh" -}}
-{{- else if or (contains "README" $first) (hasSuffix ".md" $first) (contains "LICENSE" $first) -}}
-  {{- $scope = "docs" -}}
-{{- end -}}
-
 {{ promptString "Commit message (feat: new feature | fix: bug | refactor: rewrite | docs: documentation | style: formatting | chore: maintenance)" }}
 
+{{ if $hasDiff -}}
 Updated files:
 {{ range $files -}}
 - {{ . }}
 {{ end }}
 Author: {{ .chezmoi.username }}@{{ .chezmoi.hostname }}
 {{- else -}}
-chore(dotfiles): update configurations by {{ .chezmoi.username }} on {{ .chezmoi.hostname }}
+Author: {{ .chezmoi.username }}@{{ .chezmoi.hostname }}
 {{- end -}}
