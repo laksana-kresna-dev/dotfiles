@@ -8,16 +8,7 @@
   {{- end -}}
 {{- end -}}
 
-Conventional Commit Examples:
-  feat:     feat(zsh): add zoxide integration
-  fix:      fix(nvim): resolve lsp keymap conflict
-  refactor: refactor(tmux): split config into modules
-  docs:     docs(readme): add arch installation guide
-  style:    style(i3): change border color scheme
-  chore:    chore(chezmoi): update .chezmoiignore rules
-----------------------------------------------------------------------
-
-{{ promptString "Enter commit message: " }}
+{{ promptString "Commit message (feat: new feature | fix: bug | refactor: rewrite | docs: documentation | style: formatting | chore: maintenance)" }}
 
 {{ if $hasDiff -}}
 Updated files:
