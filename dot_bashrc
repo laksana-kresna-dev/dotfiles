@@ -1,0 +1,138 @@
+#
+# ~/.bashrc
+#
+
+# environment variables
+export FZF_DEFAULT_COMMAND='rg --files --hidden --glob "!.git"'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export EDITOR="nvim"
+
+# bash-preexec.sh is a framework for Bash that allows you to register functions to be executed before each prompt and before each command. It is useful for implementing features like autosuggestions, command logging, and more.
+[[ $- != *i* ]] && return
+[[ -f /usr/share/bash-preexec/bash-preexec.sh ]] && source /usr/share/bash-preexec/bash-preexec.sh
+
+# () is a subshell, which means that any changes made to the environment variables or working directory inside the function will not affect the parent shell. This is useful for functions that need to perform some operations without changing the state of the shell.
+fp() {
+  local dir
+  dir=$(fd ${1:-.} --type d 2>/dev/null | fzf +m) && cd "$dir"
+}
+
+# () is a subshell, which means that any changes made to the environment variables or working directory inside the function will not affect the parent shell. This is useful for functions that need to perform some operations without changing the state of the shell.
+fe() {
+  local file
+  file=$(fd ${1:-.} --type f 2>/dev/null | fzf +m) && [ -n "$file" ] && ${EDITOR:-nvim} "$file"
+}
+
+# () is a subshell, which means that any changes made to the environment variables or working directory inside the function will not affect the parent shell. This is useful for functions that need to perform some operations without changing the state of the shell.
+ff() {
+    fd --type f --hidden --exclude .git "$1"
+}
+
+# () is a subshell, which means that any changes made to the environment variables or working directory inside the function will not affect the parent shell. This is useful for functions that need to perform some operations without changing the state of the shell.
+fdirc() {
+    fd --type d --hidden --exclude .git "$1"
+}
+
+# () is a subshell, which means that any changes made to the environment variables or working directory inside the function will not affect the parent shell. This is useful for functions that need to perform some operations without changing the state of the shell.
+extract() {
+  if [ -f "$1" ] ; then
+    case "$1" in
+      *.tar.bz2)   tar xjf "$1"     ;;
+      *.tar.gz)    tar xzf "$1"     ;;
+      *.bz2)       bunzip2 "$1"     ;;
+      *.rar)       unrar x "$1"     ;;
+      *.gz)        gunzip "$1"      ;;
+      *.tar)       tar xf "$1"      ;;
+      *.tbz2)      tar xjf "$1"     ;;
+      *.tgz)       tar xzf "$1"     ;;
+      *.zip)       unzip "$1"       ;;
+      *.Z)         uncompress "$1"  ;;
+      *.7z)        7z x "$1"        ;;
+      *)           echo "'$1' cannot be extracted via extract()" ;;
+    esac
+  else
+    echo "'$1' is not a valid file"
+  fi
+}
+
+# bash-completion is a collection of shell scripts that provide command-line completion for various commands and utilities. It allows users to type part of a command or option and then press the Tab key to automatically complete it, saving time and reducing errors.
+if ! shopt -oq posix; then
+  if [ -f /usr/share/bash-completion/bash_completion ]; then
+    . /usr/share/bash-completion/bash_completion
+  elif [ -f /etc/bash_completion ]; then
+    . /etc/bash_completion
+  fi
+fi
+
+# Enable case-insensitive globbing (used in pathname expansion)
+shopt -s cdspell
+shopt -s nocaseglob
+
+# Enable programmable completion features (you don't need to enable this, if it's already enabled in /etc/bash.bashrc and /etc/profile sources /etc/bash.bashrc).
+bind '"\e[A": history-search-backward'
+bind '"\e[B": history-search-forward'
+
+# Set history size and control options
+HISTSIZE=10000
+# Set the maximum number of lines contained in the history file
+HISTFILESIZE=20000
+# Set the history control options to ignore duplicate commands and commands that start with a space
+HISTCONTROL=ignoreboth
+# Set the history format to include the timestamp of each command
+PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
+
+# Set the prompt to display the username, hostname, and current working directory
+PS1='[\u@\h \W]\$ '
+
+# Aliases
+alias version="sed -n 1p /etc/os-release && sed -n 13p /etc/os-release && sed -n 14p /etc/os-release"
+alias rm='rm -i'
+alias cp='cp -i'
+alias mv='mv -i'
+
+# Pacman aliases
+alias sync="sudo pacman -Syyy"
+alias install="sudo pacman -S"
+alias update="sudo pacman -Syyu"
+alias search="sudo pacman -Ss"
+alias search-local="sudo pacman -Qs"
+alias pkg-info="sudo pacman -Qi"
+alias local-install="sudo pacman -U"
+alias clr-cache="sudo pacman -Scc"
+alias unlock="sudo rm /var/lib/pacman/db.lck"
+alias remove="sudo pacman -R"
+alias autoremove="sudo pacman -Rns"
+
+# Docker aliases
+alias dps='docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"'
+alias dimages='docker images'
+alias ddown='docker compose down'
+alias dup='docker compose up -d'
+alias dlogs='docker compose logs -f'
+alias dprune='docker system prune -a --volumes'
+
+# Git aliases
+alias cdgit='cd $(git rev-parse --show-toplevel 2>/dev/null || echo .)'
+alias gstatus='git status -s'
+alias glog="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+
+# path to the docker socket file, which is used for communication between the Docker client and the Docker daemon. The socket file is located in the XDG_RUNTIME_DIR directory, which is a standard location for storing runtime files for user sessions.
+export XDG_RUNTIME_DIR=/run/user/$(id -u)
+export DOCKER_HOST=unix://$XDG_RUNTIME_DIR/docker.socket
+
+# >> There are several options you can use when sourcing:
+# * askfirst    ask before searching the database for a command
+# * noprompt    disable installation prompt
+# * noupdate    disable "out of date" checks for db and files cache
+# * quiet       decrease verbosity
+# * su		use su instead of sudo for root access
+source /usr/share/doc/find-the-command/ftc.bash noprompt quiet
+
+# zoxide is a smarter cd command. It keeps track of the directories you use most frequently, and allows you to jump to them using a few keystrokes.
+eval "$(zoxide init bash)"
+# starship is a cross-shell prompt that displays information about the current working directory, git status, and other useful information. It is highly customizable and can be configured to display different information based on the context.
+eval "$(starship init bash)"
+
+# Display the last 5 recent directories from zoxide
+#echo -e "\n\e[1;34m[Zoxide Recent Directories]\e[0m"
+#zoxide query -l | head -n 5
